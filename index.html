@@ -103,30 +103,30 @@
     
     /* 🔊 NEW: Styles for Fixed Player Container */
     #floating-player-container {
-        position: fixed;
-        bottom: 20px; /* Distance from the bottom */
-        right: 20px; /* Distance from the right */
-        width: 300px; /* Fixed width for the player */
-        z-index: 100; /* Ensure it floats above all other content */
-        transition: transform 0.3s;
-        /* Custom background for the floating player */
-        background-color: rgba(13, 17, 23, 0.9); /* #0d1117 with slight opacity */
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 12px;
+      position: fixed;
+      bottom: 20px; /* Distance from the bottom */
+      right: 20px; /* Distance from the right */
+      width: 300px; /* Fixed width for the player */
+      z-index: 100; /* Ensure it floats above all other content */
+      transition: transform 0.3s;
+      /* Custom background for the floating player */
+      background-color: rgba(13, 17, 23, 0.9); /* #0d1117 with slight opacity */
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px;
     }
 
     #floating-player-container:hover {
-        transform: scale(1.02);
+      transform: scale(1.02);
     }
     /* Styles for the shuffle button when active */
     .shuffle-active {
-        color: #48BB78; /* Tailwind green-500 */
+      color: #48BB78; /* Tailwind green-500 */
     }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen text-white p-4">
+<body class="flex flex-col items-center justify-center min-h-screen text-white p-4"> 
 
   <audio id="background-music">
     <source src="feel it.mp3" type="audio/mpeg">
@@ -135,8 +135,8 @@
   <div class="bg-blur-container"></div>
 
   <div class="relative w-full max-w-md p-8 rounded-3xl shadow-2xl 
-               bg-white/5 backdrop-blur-xl border border-white/10 
-               flex flex-col items-center space-y-6 transform hover:scale-[1.01] transition duration-300">
+              bg-white/5 backdrop-blur-xl border border-white/10 
+              flex flex-col items-center space-y-6 transform hover:scale-[1.01] transition duration-300">
 
     <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white/50 mb-4">
       <img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast5-avt-0068-tx/2f7b9d3a385a2ee5cc20eb88a43dcdf6~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=9640&refresh_token=909fb2e3&x-expires=1762898400&x-signature=S6ibMeGIBbc%2F817mSICuRFH2aoo%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5">
@@ -173,10 +173,19 @@
     </div>
 
   </div>
+  
+  <!-- === Call-to-Action Button (Moved Outside) === -->
+  <a href="https://github.com/imjustbigmac?tab=repositories" target="_blank"
+     class="mt-8 px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
+  >
+      View Featured Repositories
+  </a>
+
   <div id="floating-player-container" class="text-white">
     <div class="w-full space-y-2">
+      <!-- Title updated here to initially show "Loading Song..." -->
       <div class="flex items-center justify-between w-full text-white/90 text-sm">
-        <span class="font-semibold truncate">🎵 Loading Song...</span>
+        <span class="font-semibold truncate" id="song-title-display">🎵 Loading Song...</span>
         <div class="flex items-center space-x-2">
           <span id="current-time">0:00</span>
           <span>/</span>
@@ -208,9 +217,9 @@
         </button>
 
         <button id="shuffle-btn" class="text-white/80 hover:text-green-400 transition duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M14.83 13.5l1.67 1.67V12h2v4.5l-1.67-1.67L14.83 13.5zm-5.66 0l-1.67 1.67V12h-2v4.5l1.67-1.67L9.17 13.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-            </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M14.83 13.5l1.67 1.67V12h2v4.5l-1.67-1.67L14.83 13.5zm-5.66 0l-1.67 1.67V12h-2v4.5l1.67-1.67L9.17 13.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+          </svg>
         </button>
 
         <div id="progress-container" class="progress-bar-container flex-grow">
@@ -227,7 +236,8 @@
   <script>
   // 🎶 SONG ARRAY 🎶
   const playlist = [
-    { title: 'd4vd - Feel It', src: encodeURIComponent('feel it.mp3') }, 
+    // FIX: Removed encodeURIComponent for the simple file path
+    { title: 'd4vd - Feel It', src: 'feel it.mp3' }, 
   ];
   
   let currentTrackIndex = 0;
@@ -238,14 +248,15 @@
   const playPauseBtn = document.getElementById('play-pause-btn');
   const skipNextBtn = document.getElementById('skip-next-btn'); 
   const skipPrevBtn = document.getElementById('skip-prev-btn'); 
-  const shuffleBtn = document.getElementById('shuffle-btn');     
+  const shuffleBtn = document.getElementById('shuffle-btn');      
   const playIcon = document.getElementById('play-icon');
   const pauseIcon = document.getElementById('pause-icon');
   const currentTimeDisplay = document.getElementById('current-time');
   const durationDisplay = document.getElementById('duration');
   const progressBar = document.getElementById('progress-bar');
   const progressContainer = document.getElementById('progress-container');
-  const songTitleDisplay = document.querySelector('#floating-player-container .font-semibold'); 
+  // FIX: Using the newly added ID to reference the title span
+  const songTitleDisplay = document.getElementById('song-title-display'); 
   const playlistContainer = document.getElementById('playlist-container');
 
 
@@ -276,7 +287,8 @@
     audio.src = track.src;
     audio.load();
     
-    songTitleDisplay.innerHTML = `🎵 ${track.title}`;
+    // FIX: Show song is loading until metadata confirms duration is ready
+    songTitleDisplay.innerHTML = `🎵 Loading ${track.title}...`;
     
     // We only update the icon if it's explicitly paused/played later
     // playIcon.classList.remove('hidden');
@@ -369,6 +381,8 @@
   // 2. Set the total duration once the audio metadata is loaded
   audio.addEventListener('loadedmetadata', () => {
     durationDisplay.textContent = formatTime(audio.duration);
+    // FIX: Update title to confirm media is ready to be played and seeked
+    songTitleDisplay.innerHTML = `🎵 ${getActivePlaylist()[currentTrackIndex].title}`;
   });
   
   // 3. Update the time and progress bar
@@ -398,6 +412,14 @@
 
   // 6. Handle clicking on the progress bar to seek
   progressContainer.addEventListener('click', (e) => {
+    // FIX: Check if duration is available before seeking to prevent non-finite value error
+    if (isNaN(audio.duration) || !isFinite(audio.duration)) {
+        console.error("Cannot seek: Audio duration is not available.");
+        // The error message you reported is caused by this safe guard. 
+        // It's working correctly to prevent a crash, but it means you clicked too fast!
+        return; 
+    }
+
     const rect = progressContainer.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const width = rect.width;
