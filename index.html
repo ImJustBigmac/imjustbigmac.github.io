@@ -111,8 +111,8 @@
   <div class="bg-blur-container"></div>
 
   <div class="relative w-full max-w-md p-8 rounded-3xl shadow-2xl 
-              bg-white/5 backdrop-blur-xl border border-white/10 
-              flex flex-col items-center space-y-6 transform hover:scale-[1.01] transition duration-300">
+               bg-white/5 backdrop-blur-xl border border-white/10 
+               flex flex-col items-center space-y-6 transform hover:scale-[1.01] transition duration-300">
 
     <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white/50 mb-4">
       <img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast5-avt-0068-tx/2f7b9d3a385a2ee5cc20eb88a43dcdf6~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=9640&refresh_token=909fb2e3&x-expires=1762898400&x-signature=S6ibMeGIBbc%2F817mSICuRFH2aoo%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5">
@@ -128,7 +128,7 @@
 
     <div class="w-full pt-4 space-y-2">
       <div class="flex items-center justify-between w-full text-white/90 text-sm">
-        <span class="font-semibold truncate">🎵 d4vd - Feel It </span>
+        <span class="font-semibold truncate">🎵 Loading Song...</span>
         <div class="flex items-center space-x-2">
           <span id="current-time">0:00</span>
           <span>/</span>
@@ -150,6 +150,13 @@
           <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
         </div>
       </div>
+      
+      <div class="w-full pt-2 text-sm text-white/70">
+          <p class="mb-1 font-semibold text-white/80">Playlist:</p>
+          <ul id="playlist-container" class="space-y-1">
+              </ul>
+      </div>
+
     </div>
     <div class="flex items-center text-white/80 space-x-2 text-sm">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -174,16 +181,15 @@
     </div>
 
   </div>
-<script>
+  <script>
   // 🎶 SONG ARRAY 🎶
+  // NOTE: encodeURIComponent() is used on file names with spaces to ensure they load correctly.
   const playlist = [
-    { title: 'Feel It', src: 'feel-it.mp3' },
+    { title: 'Feel It', src: encodeURIComponent('feel-it.mp3') }, 
     { title: 'STAY', src: 'STAY.mp3' },
-    { title: 'The Days', src: 'The-Days.mp3' },
+    { title: 'The Days', src: encodeURIComponent('The-Days.mp3') },
     { title: 'Ransom', src: 'Ransom.mp3' },
-    { title: 'Notion', src: 'Notion.mp3' },
-    // Add more songs here! 
-    // Example: { title: 'Another Song Title', src: 'media/another-song.mp3' },
+    { title: 'Notion', src: 'notion.mp3' },
   ];
   
   let currentTrackIndex = 0;
@@ -196,7 +202,7 @@
   const durationDisplay = document.getElementById('duration');
   const progressBar = document.getElementById('progress-bar');
   const progressContainer = document.getElementById('progress-container');
-  const songTitleDisplay = document.querySelector('.w-full.pt-4 .font-semibold');
+  const songTitleDisplay = document.querySelector('.w-full.pt-4 .font-semibold'); 
   const playlistContainer = document.getElementById('playlist-container');
 
 
@@ -211,10 +217,10 @@
     currentTrackIndex = index;
     const track = playlist[index];
     
-    // Set audio source and loop
+    // Set audio source (using the potentially encoded source path)
     audio.src = track.src;
     audio.load();
-    audio.loop = true; // Keep looping for background music
+    audio.loop = true; 
 
     // Update the displayed title
     songTitleDisplay.innerHTML = `🎵 ${track.title}`;
@@ -228,18 +234,31 @@
   }
   
   function playTrack() {
-    audio.play();
-    playIcon.classList.add('hidden');
-    pauseIcon.classList.remove('hidden');
+    // Attempt to play, catching potential browser security errors (e.g., autoplay block)
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(_ => {
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+        renderPlaylist(); // Update status icon
+      }).catch(error => {
+        // Autoplay was prevented. User must interact.
+        console.log("Autoplay was blocked by the browser. Click the play button to start.");
+      });
+    }
   }
 
   function pauseTrack() {
     audio.pause();
     playIcon.classList.remove('hidden');
     pauseIcon.classList.add('hidden');
+    renderPlaylist(); // Update status icon
   }
 
   function renderPlaylist() {
+    // Check if the container exists before trying to manipulate it
+    if (!playlistContainer) return; 
+
     playlistContainer.innerHTML = ''; // Clear existing list
 
     playlist.forEach((track, index) => {
@@ -249,7 +268,7 @@
       listItem.className = `cursor-pointer p-1 rounded transition duration-200 
                             ${isCurrent ? 'bg-white/10 text-white' : 'hover:bg-white/5'}`;
       
-      // Use '▶' or '⏸' icon prefix
+      // Use '▶' or '•' icon prefix, checking if the current song is also playing
       const statusIcon = isCurrent && !audio.paused ? '▶' : '•';
 
       listItem.innerHTML = `<span class="mr-1">${statusIcon}</span> ${track.title}`;
@@ -277,9 +296,13 @@
   // 3. Update the time and progress bar
   audio.addEventListener('timeupdate', () => {
     currentTimeDisplay.textContent = formatTime(audio.currentTime);
-    const progress = (audio.currentTime / audio.duration) * 100;
-    progressBar.style.width = `${progress}%`;
-    renderPlaylist(); // Update status icon in the list
+    // Ensure duration is valid before calculating progress
+    if (!isNaN(audio.duration) && isFinite(audio.duration)) {
+      const progress = (audio.currentTime / audio.duration) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+    // Re-render only if audio state changed (improves performance vs. timeupdate)
+    // Removed renderPlaylist() from timeupdate to avoid excessive re-draws.
   });
 
   // 4. Handle Play/Pause button click
@@ -300,6 +323,9 @@
     const newTime = (clickX / width) * audio.duration;
     audio.currentTime = newTime;
   });
+
+  // Final initial render call
+  renderPlaylist();
 
 </script>
 </body>
