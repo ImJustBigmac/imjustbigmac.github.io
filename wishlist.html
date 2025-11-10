@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dark-Theme Wishlist</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* GitHub Dark Background */
+        }
+
+        /* Adapted background style from your original code */
+        .bg-blur-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: -1;
+            /* Placeholder: Replace with your preferred GIF/Image URL */
+            background-image: url('https://u.cubeupload.com/imjustbigmac/6af610112ee51bd2ca32.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            animation: pulse-bg 30s infinite alternate ease-in-out;
+        }
+
+        .bg-blur-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(16px);
+            filter: blur(8px);
+        }
+
+        @keyframes pulse-bg {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Custom style for the Checkbox to match the dark theme */
+        .checkbox-container {
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .custom-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #38a169; /* Green border for visibility */
+            border-radius: 4px;
+            background-color: transparent;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .custom-checkbox:checked {
+            background-color: #38a169; /* Tailwind green-600 */
+            border-color: #38a169;
+        }
+
+        .custom-checkbox:checked + .item-details {
+            text-decoration: line-through;
+            color: #6b7280; /* Gray out text */
+        }
+
+        /* Checkmark icon (optional, using Tailwind utilities is simpler) */
+        /* .custom-checkbox:checked::after { ... } */
+
+    </style>
+</head>
+<body class="flex flex-col items-center min-h-screen text-white p-4">
+
+    <div class="bg-blur-container"></div>
+
+    <div class="w-full max-w-2xl mt-12 mb-12 p-8 rounded-3xl shadow-2xl
+                bg-white/5 backdrop-blur-xl border border-white/10
+                flex flex-col space-y-6 transform transition duration-300">
+
+        <h1 class="text-5xl font-extrabold tracking-tight text-center text-green-400">
+            CHristmas Wishlist
+        </h1>
+        <p class="text-lg text-white/70 text-center mb-6 border-b border-white/10 pb-4">
+            please speed i need this my moms kinda homeless
+        </p>
+
+        <div class="flex items-center space-x-4 p-4 rounded-xl border border-white/10 bg-black/10 hover:bg-black/20 transition duration-200">
+            <input type="checkbox" id="item1" class="custom-checkbox">
+            <div class="flex-grow item-details">
+                <label for="item1" class="text-xl font-bold text-white block">Thrust Master Joystick</label>
+                <p class="text-sm text-gray-400 mt-1">
+                    <span class="font-semibold text-green-400">Note:</span> i also want msfs 2025 with this :P
+                </p>
+                <a href="https://a.co/d/b55TQlL" target="_blank" class="text-blue-400 hover:text-blue-300 text-sm mt-1 inline-block transition duration-200">
+                    View on Amazon
+                </a>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4 p-4 rounded-xl border border-white/10 bg-black/10 hover:bg-black/20 transition duration-200">
+            <input type="checkbox" id="item2" class="custom-checkbox">
+            <div class="flex-grow item-details">
+                <label for="item2" class="text-xl font-bold text-white block"> Aula F75</label>
+                <p class="text-sm text-gray-400 mt-1">
+                    <span class="font-semibold text-green-400">Note:</span> Seasalt Blue Color
+                </p>
+                <a href="https://www.amazon.com/dp/B0CW8Z2CCZ/ref=twister_B0CNTF4MGN?_encoding=UTF8&th=1" target="_blank" class="text-blue-400 hover:text-blue-300 text-sm mt-1 inline-block transition duration-200">
+                    Amazon
+                </a>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4 p-4 rounded-xl border border-white/10 bg-black/10 hover:bg-black/20 transition duration-200">
+            <input type="checkbox" id="item3" class="custom-checkbox">
+            <div class="flex-grow item-details">
+                <label for="item3" class="text-xl font-bold text-white block">Nintendo Switch eShop Gift Card</label>
+                <p class="text-sm text-gray-400 mt-1">
+                    <span class="font-semibold text-green-400">Note:</span> $50 amount.
+                </p>
+                </div>
+        </div>
+
+        </div>
+    
+    <p class="text-sm text-white/50 mt-4 pb-12">Built with a love for dark themes and Tailwind CSS.</p>
+
+    </body>
+</html>
