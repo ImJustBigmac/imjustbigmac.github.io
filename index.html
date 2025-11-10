@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Me - GitHub Profile</title>
 
-  <!-- Load Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -86,17 +85,35 @@
     a:hover .brand-logo-youtube {
       transform: scale(1.1);
     }
+
+    /* Custom Player Styles for better visibility */
+    .progress-bar-container {
+      height: 8px;
+      background-color: #21262d; /* GitHub dark background */
+      border-radius: 9999px; /* Tailwind's rounded-full */
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-color: #38a169; /* Tailwind's green-500 */
+      border-radius: 9999px;
+      transition: width 0.1s linear;
+    }
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen text-white p-4">
 
+  <audio id="background-music" loop>
+    <source src="feel it.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
   <div class="bg-blur-container"></div>
 
   <div class="relative w-full max-w-md p-8 rounded-3xl shadow-2xl 
               bg-white/5 backdrop-blur-xl border border-white/10 
               flex flex-col items-center space-y-6 transform hover:scale-[1.01] transition duration-300">
 
-    <!-- Profile Picture -->
     <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white/50 mb-4">
       <img src="https://p16-common-sign.tiktokcdn-us.com/tos-useast5-avt-0068-tx/2f7b9d3a385a2ee5cc20eb88a43dcdf6~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=9640&refresh_token=909fb2e3&x-expires=1762898400&x-signature=S6ibMeGIBbc%2F817mSICuRFH2aoo%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast5">
     </div>
@@ -109,6 +126,31 @@
       Hi! I'm Bigmac — I like planes, Rubik's cubes, and sometimes coding.
     </p>
 
+    <div class="w-full pt-4 space-y-2">
+      <div class="flex items-center justify-between w-full text-white/90 text-sm">
+        <span class="font-semibold truncate">🎵 dv4d - Feel It </span>
+        <div class="flex items-center space-x-2">
+          <span id="current-time">0:00</span>
+          <span>/</span>
+          <span id="duration">0:00</span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <button id="play-pause-btn" class="text-white/80 hover:text-white transition duration-200">
+          <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+          </svg>
+        </button>
+
+        <div id="progress-container" class="progress-bar-container flex-grow">
+          <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+        </div>
+      </div>
+    </div>
     <div class="flex items-center text-white/80 space-x-2 text-sm">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 12.414a4 4 0 10-1.414 1.414l4.243 4.243a1 1 0 001.414-1.414z" />
@@ -116,22 +158,91 @@
       <span>San Diego, California</span>
     </div>
 
-<!-- Social Icons -->
-<div class="flex justify-center items-center space-x-6 pt-4">
-  <a href="https://github.com/imjustbigmac" target="_blank">
-    <img src="https://u.cubeupload.com/imjustbigmac/githubpageslogorepos.png" alt="GitHub" class="brand-logo">
-  </a>
-  <a href="https://youtube.com/@imjustbigmac" target="_blank">
-    <img src="https://www.nicepng.com/png/full/803-8035629_white-youtube-logo-transparent.png" alt="YouTube" class="brand-logo-youtube">
-  </a>
-  <a href="https://tiktok.com/@imjustbigmac" target="_blank">
-    <img src="https://static.vecteezy.com/system/resources/previews/065/386/722/non_2x/tiktok-circle-white-logo-icon-tiktok-app-transparent-background-premium-social-media-design-for-digital-download-free-png.png" alt="TikTok" class="brand-logo-tiktok">
-  </a>
-  <a href="https://www.roblox.com/users/2645182702" target="_blank">
-    <img src="https://u.cubeupload.com/imjustbigmac/CITYPNGCOMHDRobloxWh.png" alt="Roblox" class="brand-logo">
-  </a>
-</div>
+    <div class="flex justify-center items-center space-x-6 pt-4">
+      <a href="https://github.com/imjustbigmac" target="_blank">
+        <img src="https://u.cubeupload.com/imjustbigmac/githubpageslogorepos.png" alt="GitHub" class="brand-logo">
+      </a>
+      <a href="https://youtube.com/@imjustbigmac" target="_blank">
+        <img src="https://www.nicepng.com/png/full/803-8035629_white-youtube-logo-transparent.png" alt="YouTube" class="brand-logo-youtube">
+      </a>
+      <a href="https://tiktok.com/@imjustbigmac" target="_blank">
+        <img src="https://static.vecteezy.com/system/resources/previews/065/386/722/non_2x/tiktok-circle-white-logo-icon-tiktok-app-transparent-background-premium-social-media-design-for-digital-download-free-png.png" alt="TikTok" class="brand-logo-tiktok">
+      </a>
+      <a href="https://www.roblox.com/users/2645182702" target="_blank">
+        <img src="https://u.cubeupload.com/imjustbigmac/CITYPNGCOMHDRobloxWh.png" alt="Roblox" class="brand-logo">
+      </a>
+    </div>
 
   </div>
+<script>
+  const audio = document.getElementById('background-music');
+  const playPauseBtn = document.getElementById('play-pause-btn');
+  const playIcon = document.getElementById('play-icon');
+  const pauseIcon = document.getElementById('pause-icon');
+  const currentTimeDisplay = document.getElementById('current-time');
+  const durationDisplay = document.getElementById('duration');
+  const progressBar = document.getElementById('progress-bar');
+  const progressContainer = document.getElementById('progress-container');
+
+  // Helper function to format time (seconds to m:ss)
+  function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+  }
+
+  // Set the total duration once the audio metadata is loaded
+  audio.addEventListener('loadedmetadata', () => {
+    durationDisplay.textContent = formatTime(audio.duration);
+  });
+
+  // Update the time and progress bar
+  audio.addEventListener('timeupdate', () => {
+    // 1. Update Time Display
+    currentTimeDisplay.textContent = formatTime(audio.currentTime);
+
+    // 2. Update Progress Bar
+    const progress = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = `${progress}%`;
+  });
+
+  // Handle Play/Pause button click
+  playPauseBtn.addEventListener('click', () => {
+    if (audio.paused || audio.ended) {
+      audio.play();
+      playIcon.classList.add('hidden');
+      pauseIcon.classList.remove('hidden');
+    } else {
+      audio.pause();
+      playIcon.classList.remove('hidden');
+      pauseIcon.classList.add('hidden');
+    }
+  });
+
+  // Handle clicking on the progress bar to seek
+  progressContainer.addEventListener('click', (e) => {
+    const rect = progressContainer.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+
+    // Calculate the new time position
+    const newTime = (clickX / width) * audio.duration;
+    
+    // Set the audio's current time
+    audio.currentTime = newTime;
+  });
+
+  // Update button icons when the audio is paused/played from outside the button (e.g., system controls)
+  audio.addEventListener('play', () => {
+    playIcon.classList.add('hidden');
+    pauseIcon.classList.remove('hidden');
+  });
+
+  audio.addEventListener('pause', () => {
+    playIcon.classList.remove('hidden');
+    pauseIcon.classList.add('hidden');
+  });
+
+</script>
 </body>
 </html>
