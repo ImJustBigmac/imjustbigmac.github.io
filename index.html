@@ -175,6 +175,19 @@
 
   </div>
 <script>
+  // 🎶 SONG ARRAY 🎶
+  const playlist = [
+    { title: 'Feel It', src: 'feel it.mp3' },
+    { title: 'STAY', src: 'STAY.mp3' },
+    { title: 'The Days', src: 'The Days.mp3' },
+    { title: 'Ransom', src: 'Ransom.mp3' },
+    { title: 'Notion', src: 'Notion.mp3' },
+    // Add more songs here! 
+    // Example: { title: 'Another Song Title', src: 'media/another-song.mp3' },
+  ];
+  
+  let currentTrackIndex = 0;
+
   const audio = document.getElementById('background-music');
   const playPauseBtn = document.getElementById('play-pause-btn');
   const playIcon = document.getElementById('play-icon');
@@ -183,64 +196,109 @@
   const durationDisplay = document.getElementById('duration');
   const progressBar = document.getElementById('progress-bar');
   const progressContainer = document.getElementById('progress-container');
+  const songTitleDisplay = document.querySelector('.w-full.pt-4 .font-semibold');
+  const playlistContainer = document.getElementById('playlist-container');
 
-  // Helper function to format time (seconds to m:ss)
+
+  // --- Helper Functions ---
   function formatTime(seconds) {
     const min = Math.floor(seconds / 60);
     const sec = Math.floor(seconds % 60);
     return `${min}:${sec < 10 ? '0' : ''}${sec}`;
   }
 
-  // Set the total duration once the audio metadata is loaded
+  function loadTrack(index) {
+    currentTrackIndex = index;
+    const track = playlist[index];
+    
+    // Set audio source and loop
+    audio.src = track.src;
+    audio.load();
+    audio.loop = true; // Keep looping for background music
+
+    // Update the displayed title
+    songTitleDisplay.innerHTML = `🎵 ${track.title}`;
+    
+    // Reset play/pause icon to 'Play' until explicitly played
+    playIcon.classList.remove('hidden');
+    pauseIcon.classList.add('hidden');
+
+    // Re-render the playlist to highlight the current track
+    renderPlaylist();
+  }
+  
+  function playTrack() {
+    audio.play();
+    playIcon.classList.add('hidden');
+    pauseIcon.classList.remove('hidden');
+  }
+
+  function pauseTrack() {
+    audio.pause();
+    playIcon.classList.remove('hidden');
+    pauseIcon.classList.add('hidden');
+  }
+
+  function renderPlaylist() {
+    playlistContainer.innerHTML = ''; // Clear existing list
+
+    playlist.forEach((track, index) => {
+      const isCurrent = index === currentTrackIndex;
+      const listItem = document.createElement('li');
+      
+      listItem.className = `cursor-pointer p-1 rounded transition duration-200 
+                            ${isCurrent ? 'bg-white/10 text-white' : 'hover:bg-white/5'}`;
+      
+      // Use '▶' or '⏸' icon prefix
+      const statusIcon = isCurrent && !audio.paused ? '▶' : '•';
+
+      listItem.innerHTML = `<span class="mr-1">${statusIcon}</span> ${track.title}`;
+      
+      // Event listener to switch to the clicked track
+      listItem.addEventListener('click', () => {
+        loadTrack(index);
+        playTrack();
+      });
+
+      playlistContainer.appendChild(listItem);
+    });
+  }
+
+  // --- Event Listeners and Initial Setup ---
+  
+  // 1. Set the initial song and load metadata
+  loadTrack(currentTrackIndex); 
+  
+  // 2. Set the total duration once the audio metadata is loaded
   audio.addEventListener('loadedmetadata', () => {
     durationDisplay.textContent = formatTime(audio.duration);
   });
-
-  // Update the time and progress bar
+  
+  // 3. Update the time and progress bar
   audio.addEventListener('timeupdate', () => {
-    // 1. Update Time Display
     currentTimeDisplay.textContent = formatTime(audio.currentTime);
-
-    // 2. Update Progress Bar
     const progress = (audio.currentTime / audio.duration) * 100;
     progressBar.style.width = `${progress}%`;
+    renderPlaylist(); // Update status icon in the list
   });
 
-  // Handle Play/Pause button click
+  // 4. Handle Play/Pause button click
   playPauseBtn.addEventListener('click', () => {
     if (audio.paused || audio.ended) {
-      audio.play();
-      playIcon.classList.add('hidden');
-      pauseIcon.classList.remove('hidden');
+      playTrack();
     } else {
-      audio.pause();
-      playIcon.classList.remove('hidden');
-      pauseIcon.classList.add('hidden');
+      pauseTrack();
     }
   });
 
-  // Handle clicking on the progress bar to seek
+  // 5. Handle clicking on the progress bar to seek
   progressContainer.addEventListener('click', (e) => {
     const rect = progressContainer.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const width = rect.width;
 
-    // Calculate the new time position
     const newTime = (clickX / width) * audio.duration;
-    
-    // Set the audio's current time
     audio.currentTime = newTime;
-  });
-
-  // Update button icons when the audio is paused/played from outside the button (e.g., system controls)
-  audio.addEventListener('play', () => {
-    playIcon.classList.add('hidden');
-    pauseIcon.classList.remove('hidden');
-  });
-
-  audio.addEventListener('pause', () => {
-    playIcon.classList.remove('hidden');
-    pauseIcon.classList.add('hidden');
   });
 
 </script>
