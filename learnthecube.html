@@ -1,0 +1,162 @@
+l<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubik's Cube Profile & Beginner Method</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* GitHub Dark Background */
+        }
+
+        /* Background animation and blur adapted from your original code */
+        .bg-blur-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: -1;
+            /* Placeholder: Replace with a cube-related GIF/Image URL */
+            background-image: url('https://u.cubeupload.com/imjustbigmac/6af610112ee51bd2ca32.gif'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            animation: pulse-bg 30s infinite alternate ease-in-out;
+        }
+
+        .bg-blur-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(16px);
+            filter: blur(8px);
+        }
+
+        @keyframes pulse-bg {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Styling for the step boxes */
+        .step-box {
+            position: relative;
+            padding-left: 1.5rem; /* Space for the step number */
+        }
+        .step-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #48BB78; /* Tailwind Green */
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center min-h-screen text-white p-4">
+
+    <div class="bg-blur-container"></div>
+
+    <div class="w-full max-w-3xl mt-12 mb-12 p-8 rounded-3xl shadow-2xl
+                bg-white/5 backdrop-blur-xl border border-white/10
+                flex flex-col space-y-8 transform transition duration-300">
+
+        <h1 class="text-5xl font-extrabold tracking-tight text-center text-green-400 border-b border-white/10 pb-4">
+            The Art of the Cube 🎲
+        </h1>
+
+        <div class="p-4 rounded-xl border border-white/10 bg-black/10">
+            <h2 class="text-2xl font-bold text-white mb-2">My Cube of Choice</h2>
+            <div class="flex items-center space-x-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-yellow-400" viewBox="0 0 24 24" fill="currentColor"><path d="M6 3v12l6 6 6-6V3H6zm6 15l-3-3V6h6v9l-3 3z"/></svg>
+                <p class="text-lg text-white/90">
+                    My favorite is the **GAN 356** <span class="text-gray-400">(A classic, high-performance cube)</span>. It offers amazing speed, corner-cutting, and a satisfying magnetic feel that makes practice a joy.
+                </p>
+            </div>
+        </div>
+
+        <h2 class="text-3xl font-bold text-green-400 pt-4">Beginner's Method Tutorial</h2>
+        <p class="text-white/70">
+            The Beginner Method is the easiest way to solve the 3x3 Rubik's Cube. It breaks the solution down into 7 simple steps, layer by layer (LBL).
+        </p>
+
+        <div class="space-y-6">
+
+            <div class="step-box">
+                <span class="step-number">1.</span>
+                <h3 class="text-xl font-semibold text-white">The White Cross</h3>
+                <p class="text-white/80 pl-4">
+                    Form a cross shape on the **White** face, ensuring the **edge pieces** match the center colors of the adjacent sides (e.g., White-Red edge matches the White and Red centers).
+                </p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">2.</span>
+                <h3 class="text-xl font-semibold text-white">Complete the First Layer (F2L)</h3>
+                <p class="text-white/80 pl-4">
+                    Insert the four **white corner pieces** to complete the entire first layer. This is done by holding the cube so the White side is on the bottom, and using a simple 4-move algorithm called the **Sledgehammer** (R U R' U') or its reverse.
+                </p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">3.</span>
+                <h3 class="text-xl font-semibold text-white">Complete the Second Layer</h3>
+                <p class="text-white/80 pl-4">
+                    Solve the four **middle layer edge pieces** (no yellow color). You'll use two mirror-image algorithms (one for the left side, one for the right side) to move the edge from the top layer into the middle layer.
+                </p>
+            </div>
+            
+            <div class="step-box">
+                <span class="step-number">4.</span>
+                <h3 class="text-xl font-semibold text-white">The Yellow Cross</h3>
+                <p class="text-white/80 pl-4">
+                    Ignore the corner pieces for now. Use the **F R U R' U' F'** algorithm one or more times to form a Yellow Cross on the top face. You may start with a dot, a small 'L' shape, or a line.
+                </p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">5.</span>
+                <h3 class="text-xl font-semibold text-white">Orient the Last Layer (OLL)</h3>
+                <p class="text-white/80 pl-4">
+                    Flip all the remaining **Yellow corner pieces** so the Yellow face is fully complete. Use the **R U R' U R U2 R'** algorithm (Sune) while holding the cube in specific orientations until the whole top face is yellow.
+                </p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">6.</span>
+                <h3 class="text-xl font-semibold text-white">Position the Last Layer Corners (PLL)</h3>
+                <p class="text-white/80 pl-4">
+                    Get the **corner pieces** into their correct *position* (even if they're twisted). Use the **U R U' L' U R' U' L** algorithm until at least two adjacent corners are in the correct spot.
+                </p>
+            </div>
+            
+            <div class="step-box">
+                <span class="step-number">7.</span>
+                <h3 class="text-xl font-semibold text-white">Position the Last Layer Edges</h3>
+                <p class="text-white/80 pl-4">
+                    The final step! Use the algorithm to cycle the remaining **edge pieces** until the cube is solved: **R2 U R U R' U' R' U' R' U R'** (or similar 11-move algorithm).
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+    
+    <p class="text-sm text-white/50 mt-4 pb-12">Keep practicing those algorithms! The more you use them, the faster you'll get.</p>
+
+</body>
+</html>
